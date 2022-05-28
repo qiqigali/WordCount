@@ -1,80 +1,73 @@
 #include<bits/stdc++.h>
-
-
-
-int charc(char *file);
-
-int wordc(char *file);
-
-
+//统计字符数 
+int charCount(char *file);
+//统计单词数 
+int wordCount(char *file);
 
 int main()
 {
 	FILE *fp;
-	int ch,wo,li;
-	char file[50];//文件地址
-	printf("\n请输入文件地址：\n");
-	scanf("%s",file);
-	if((fp=fopen(file,"r"))==NULL)
+	//统计字符还是统计单词 
+	char order[10];
+	int chCount,woCount;
+	//保存文件名 
+	char file[101];
+	scanf("%s %s",order,file);
+	
+	if(order[1] == 'c')
 	{
-		printf("不存在这个文件");
-		exit(-1);
+		chCount=charCount(file);
+		printf("\n字符数:%d\n",chCount);
 	}
-	else
+	else if(order[1] == 'w')
 	{
-		ch=charc(file);
-		wo=wordc(file);
-		printf("\n该文件字符数为%d\n单词数为%d\n行数为%d\n",ch,wo);
-	}
-}
-int charc(char *file) 
-{
-	FILE *fp = NULL;
-	int charcount = 0;
-	if ((fp=fopen(file,"r"))== NULL) 
-	{
-	printf("文件寻找失败！\n");
-	exit(-1);
+		woCount=wordCount(file);
+		printf("\n单词数:%d\n",woCount);
 	}
 
+}
+int charCount(char *file) 
+{
+	FILE *fp = NULL;
+	int ans = 0;
+	if ((fp=fopen(file,"r"))== NULL) 
+	{
+		printf("没有找到对应文件！\n");
+		exit(-1);
+	}
 	char ch;
 	ch = fgetc(fp);
 	while (!feof(fp)) 
 	{
-	ch = fgetc(fp);//读取文件中的字符
-	charcount++;//统计字符数
+		ans++;
+		ch = fgetc(fp);
 	}
 	fclose(fp);
-	return charcount;
+	return ans;
 }
 
 
 
-int wordc(char *file) 
+int wordCount(char *file) 
 {
 	FILE *fp = NULL;
 	int wordcount = 0;
 	if ((fp = fopen(file,"r")) == NULL) 
 	{
-	printf("文件寻找失败！\n");
-	exit(-1);
+		printf("没有找到对应文件！\n");
+		exit(-1);
 	}
 	char ch;
+	ch = fgetc(fp);
 	int word;
-	while (!feof(fp)) 
+	while(!feof(fp)) 
 	{
+		//统计单词间隔数，加一即为单词数 
+		if(ch==' '||ch == ',')
+		wordcount++;
 		ch = fgetc(fp);
-		if ((ch >'Z'&&ch< 'a') || ch>'z')
-		{
-			word = 0;
-		}
-		else if (word == 0)
-
-		{
-			word = 1;
-			wordcount++;	
-		}
 	}
-return wordcount;
+	wordcount++;
+	return wordcount;
 }
 
